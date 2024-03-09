@@ -1,0 +1,25 @@
+%{
+#include <stdio.h>
+int num_words = 0;
+int num_chars = 0;
+int num_lines = 0;
+%}
+
+%%
+[a-zA-Z_][a-zA-Z0-9_]*      { num_words++; num_chars += yyleng; }
+[ \t]+                      ; /* Ignore spaces and tabs */
+\n                          { num_lines++; num_chars++; }
+.                           { num_chars++; }
+%%
+
+int main() {
+    yylex();
+    printf("Number of words: %d\n", num_words);
+    printf("Number of characters: %d\n", num_chars);
+    printf("Number of lines: %d\n", num_lines);
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}

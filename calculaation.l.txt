@@ -1,0 +1,53 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+%}
+
+%option noyywrap
+
+int result = 0;
+int number = 0;
+int operator = '+';
+int next_operator = '+';
+
+void perform_calculation() {
+    switch (operator) {
+        case '+':
+            result += number;
+            break;
+        case '-':
+            result -= number;
+            break;
+        case '*':
+            result *= number;
+            break;
+        case '/':
+            result /= number;
+            break;
+    }
+}
+
+%%
+
+[0-9]+          { number = atoi(yytext); }
+"+"             { perform_calculation(); operator = '+'; }
+"-"             { perform_calculation(); operator = '-'; }
+"*"             { perform_calculation(); operator = '*'; }
+"/"             { perform_calculation(); operator = '/'; }
+"("             { printf("Left Parenthesis\n"); }
+")"             { printf("Right Parenthesis\n"); }
+[ \t\n]         ; // Ignore whitespace characters
+.               { printf("Invalid character: %s\n", yytext); }
+
+%%
+
+int main() {
+    printf("Enter expression: ");
+    yylex();
+    printf("Result: %d\n", result);
+    return 0;
+}
+
+void yyerror(char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+}

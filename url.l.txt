@@ -1,0 +1,13 @@
+%{
+%}
+%%
+(https?|ftps?):\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9_\-]+)* {printf("\nURL valid\n");}
+.+ {printf("\nURL invalid\n");}
+%%
+int yywrap(){}
+void main()
+{
+    printf("\nenter URL: ");
+    yylex();
+    printf("\n");
+}
